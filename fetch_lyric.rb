@@ -17,13 +17,13 @@ class Lyric
 
     params = create_params queries
 
-    puts "#{SEARCH_URL}?#{params}"
     res = request "#{SEARCH_URL}?#{params}"
     doc = Nokogiri::HTML.parse(res.read)
 
     lists = doc.css('#mnb .bdy a')
     results = []
     lists.each do |list, _index|
+      next unless list[:href].match(/\.html$/)
       results << { href: list[:href], title: list[:title] }
     end
     results
@@ -93,8 +93,6 @@ while ARGV.count / 2 > count
   end
   count += 1
 end
-
-puts search_queries
 
 results = Lyric.fetch_titles search_queries
 
