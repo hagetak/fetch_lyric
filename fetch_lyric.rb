@@ -12,7 +12,6 @@ class Lyric
   PARAM_SEARCH_BY_TITLE = 'kt=%s&'.freeze
   PARAM_SEARCH_BY_LYRIC = 'kl=%s&'.freeze
 
-  #
   def self.fetch_titles(queries)
 
     params = create_params queries
@@ -44,11 +43,11 @@ class Lyric
     params
   end
 
-  #
   def self.get_lyric_by_url(url)
     res = request url
     doc = Nokogiri::HTML.parse(res.read)
-    doc.css('#Lyric').to_s.gsub('<br>', "\n")
+    lyric = doc.css('#Lyric').to_s.gsub('<br>', "\n")
+    lyric.gsub!('<p id="Lyric">', '').gsub!('</p>', '')
   end
 
   private
